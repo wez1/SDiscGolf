@@ -2,19 +2,20 @@
   <div>
     <b-container>
       <b-row>
-        <b-col><h2>Hole 1</h2></b-col>
-        <b-col><h2>Par 4</h2></b-col>
-        <b-col><h2>Sahanmäki-Hyvinkää</h2></b-col>
+        <b-col><h4>Hole 1</h4></b-col>
+        <b-col><h4>Par 4</h4></b-col>
+        <b-col><h4>Sahanmäki-Hyvinkää</h4></b-col>
       </b-row>
       <b-row>
         <input type="text" v-model="name" placeholder="Add New Player"/>
         <b-btn @click="addPlayer" variant="info">+</b-btn>
         <b-table :items="items">
-          <span slot="score" slot-scope="data" v-html="data.value">
-            <input type="number" v-model="score" />
-          </span>
+          <span slot="score" slot-scope="data" v-html="data.value"></span>
+          <span slot="name" slot-scope="data" v-html="data.value"></span>
+          <span slot="total" slot-scope="data" v-html="data.value"></span>
         </b-table>
       </b-row>
+      <div v-html="errormsg" style="text-align:center;" />
       <b-row>
         <b-col class="throwbutton" @click="addScore(1)" cols="3">1</b-col>
         <b-col class="throwbutton" @click="addScore(2)" cols="3">2</b-col>
@@ -32,39 +33,51 @@
 <script>
 const items = []
 var count = 0
+var playercount = 0
+const players = []
 
 export default {
-  name: 'parks',
+  name: 'stuff',
   data () {
     return {
       items: items,
-      players: [],
+      players: players,
+      errormsg: '',
       name: '',
-      total: [],
-      score: []
+      total: null,
+      playercount: playercount
     }
   },
   methods: {
     addScore (val) {
-      if (this.items.length > count) {
-        this.items[count].score = '<input placeholder="' + val + '" type="number" v-model="total"></input>'
-        this.total.push(val)
-        this.items[count].total += this.total[count]
+      this.errormsg = ''
+      console.log(this.players.length)
+      if (this.players.length > count) {
+        this.items[count].throws = val + ' (' + (val - 4) + ')'
+        this.items[count].total += val - 4
         count += 1
       } else {
-        count = 0
-        this.items[count].score = '<input placeholder="' + val + '" type="number" v-model="total"></input>'
-        this.total.push(val)
-        this.items[count].total += this.total[count]
-        count += 1
+        this.errormsg = 'All scores added already'
       }
     },
-    addPlayer (name) {
+    addPlayer (name, playercount) {
       this.items.push({
         name: this.name,
-        score: '<input type="text" v-model="score" ></input>',
+        throws: 0,
         total: 0
       })
+      this.players.push({
+        name: this.name,
+        scores: [{
+          score: 0
+        }],
+        total: 0
+      })
+      this.playercount += 1
+    },
+    removePlayer (i) {
+      this.players.splice(i, 1)
+      console.log(this.players)
     }
   }
 }
@@ -75,13 +88,17 @@ export default {
 .throwbutton {
   padding:10px;
   border: solid white 2px;
-  background-color:cyan;
+  background-color:#17a2b8;
   height:90px;
   font-size: 50px;
   color:white;
   text-align: center;
+  cursor: pointer;
 }
 .throwbutton:hover{
-  background-color: aquamarine;
+  background-color: #0592a6;
+}
+.throwbutton, select {
+  text-transform: none;
 }
 </style>

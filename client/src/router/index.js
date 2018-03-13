@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Register from '@/components/Register'
 import Login from '@/components/Login'
-import Parks from '@/components/Parks'
+import Game from '@/components/Game'
+import CreateGame from '@/components/CreateGame'
 
 Vue.use(Router)
 
@@ -23,9 +24,14 @@ export default new Router({
       component: Login
     },
     {
-      path: '/parks',
-      name: 'parks',
-      component: Parks
+      path: '/game',
+      name: 'game',
+      component: Game
+    },
+    {
+      path: '/creategame',
+      name: 'creategame',
+      component: CreateGame
     }
   ]
 })

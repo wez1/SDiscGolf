@@ -1,6 +1,6 @@
 const AuthenticationController = require('./controllers/AuthenticationController')
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
-
+const TrackController = require('./controllers/TrackController')
 module.exports = (app) => {
   app.get('/', function (req, res) {
     res.render('index', {
@@ -13,4 +13,8 @@ module.exports = (app) => {
     AuthenticationController.register)
   app.post('/login',
     AuthenticationController.login)
+  app.post('/savetrack',
+    TrackController.createTrack)
+  app.get('/gettrack',
+    TrackController.getTrack)
 }
