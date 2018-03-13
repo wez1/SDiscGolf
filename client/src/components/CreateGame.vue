@@ -2,25 +2,23 @@
   <div>
     <b-container>
       <b-row>
-        <b-col><h4>Hole 1</h4></b-col>
-        <b-col><h4>Par 4</h4></b-col>
-        <b-col><h4>Sahanmäki-Hyvinkää</h4></b-col>
-      </b-row>
-      <b-row>
         <input type="text" v-model="name" placeholder="Add New Player"/>
         <b-btn @click="addPlayer" variant="info">+</b-btn>
+        <b-btn v-if="!$store.state.isGameStarted" @click="getData" variant="info">Get the data</b-btn>
       </b-row>
     </b-container>
   </div>
 </template>
 
 <script>
+import DataService from '@/services/DataService'
 const players = []
 export default {
-  name: 'login',
+  name: 'creategame',
   data () {
     return {
-      players: players
+      players: players,
+      name: ''
     }
   },
   methods: {
@@ -32,6 +30,15 @@ export default {
         }],
         total: 0
       })
+    },
+    async getData () {
+      try {
+        const response = await DataService.getTracks()
+        console.log(response.data)
+        this.$store.dispatch('setGame', true)
+      } catch (err) {
+        console.log('error')
+      }
     }
   }
 }
