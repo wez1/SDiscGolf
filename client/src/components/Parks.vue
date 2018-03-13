@@ -2,6 +2,11 @@
   <div>
     <b-container>
       <b-row>
+        <b-col><h2>Hole 1</h2></b-col>
+        <b-col><h2>Par 4</h2></b-col>
+        <b-col><h2>Sahanmäki-Hyvinkää</h2></b-col>
+      </b-row>
+      <b-row>
         <input type="text" v-model="name" placeholder="Add New Player"/>
         <b-btn @click="addPlayer" variant="info">+</b-btn>
         <b-table :items="items">
@@ -35,25 +40,29 @@ export default {
       items: items,
       players: [],
       name: '',
-      total: 0,
+      total: [],
       score: []
     }
   },
   methods: {
     addScore (val) {
       if (this.items.length > count) {
-        this.items[count].score = val
+        this.items[count].score = '<input placeholder="' + val + '" type="number" v-model="total"></input>'
+        this.total.push(val)
+        this.items[count].total += this.total[count]
         count += 1
       } else {
         count = 0
-        this.items[count].score = val
+        this.items[count].score = '<input placeholder="' + val + '" type="number" v-model="total"></input>'
+        this.total.push(val)
+        this.items[count].total += this.total[count]
         count += 1
       }
     },
     addPlayer (name) {
       this.items.push({
         name: this.name,
-        score: '<input type="text" v-model="score">',
+        score: '<input type="text" v-model="score" ></input>',
         total: 0
       })
     }
