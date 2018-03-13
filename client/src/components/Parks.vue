@@ -26,6 +26,8 @@
 
 <script>
 const items = []
+var count = 0
+
 export default {
   name: 'parks',
   data () {
@@ -34,23 +36,24 @@ export default {
       players: [],
       name: '',
       total: 0,
-      score: 0
+      score: []
     }
   },
   methods: {
     addScore (val) {
-      if (!this.player1 && !this.player2) {
-        this.player1 = val
-        console.log('player1: ' + this.player1)
-      } else if (this.player1 && !this.player2) {
-        this.player2 = val
-        console.log('player2: ' + this.player2)
-      } else console.log('error, go to next hole already idiot!')
+      if (this.items.length > count) {
+        this.items[count].score = val
+        count += 1
+      } else {
+        count = 0
+        this.items[count].score = val
+        count += 1
+      }
     },
     addPlayer (name) {
       this.items.push({
         name: this.name,
-        score: 0,
+        score: '<input type="text" v-model="score">',
         total: 0
       })
     }
