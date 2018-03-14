@@ -8,9 +8,8 @@
       <b-nav-item v-if="$store.state.isUserLoggedIn" @click="logout" to="login">Log Out</b-nav-item>
       <b-nav-item v-if="!$store.state.isUserLoggedIn" to="login">Log in</b-nav-item>
       <b-nav-item v-if="!$store.state.isUserLoggedIn" to="register">Register</b-nav-item>
-      <b-nav-item v-if="$store.state.isUserLoggedIn" to="parks">Parks</b-nav-item>
+      <b-nav-item to="game">Play</b-nav-item>
     </b-navbar-nav>
-
   </b-collapse>
     </b-navbar>
   </div>

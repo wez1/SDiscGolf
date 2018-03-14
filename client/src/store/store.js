@@ -9,7 +9,8 @@ export default new Vuex.Store({
     token: null,
     user: null,
     isUserLoggedIn: false,
-    isGameStarted: false
+    isGameStarted: false,
+    players: []
   },
   mutations: {
     setToken (state, token) {
@@ -25,6 +26,10 @@ export default new Vuex.Store({
     },
     setGame (state, value) {
       state.isGameStarted = value
+    },
+    addPlayer (state, player) {
+      // mutate state
+      state.players.push(player)
     }
   },
   actions: {
@@ -36,6 +41,9 @@ export default new Vuex.Store({
     },
     setGame ({commit}, value) {
       commit('setGame', value)
+    },
+    addPlayer ({commit}, player) {
+      commit('addPlayer', player)
     }
   }
 })

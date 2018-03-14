@@ -1,61 +1,70 @@
 <template>
   <div>
-    <stuff />
+    <b-container>
+      <div v-if="!$store.state.isGameStarted" id="gamecreation">
+        <input type="text" v-on:keyup.enter="addPlayer" v-model="name" placeholder="Add New Player"/>
+        <b-btn @click="addPlayer" variant="info">+</b-btn>
+        <ul id="example-1">
+          <li v-for="player in players" :key="player.name" >
+            <b-btn @click="delPlayer(player)" class="mt-1 mb-1" size="sm" variant="danger">X</b-btn> {{ player.name }} </li>
+        </ul>
+        <b-btn @click="start" variant="success">Start A Round</b-btn>
+      </div>
+      <round :items="items" :track="track" :players="players" prop v-if="$store.state.isGameStarted"/>
+    </b-container>
   </div>
 </template>
 
 <script>
-import Stuff from '@/components/Stuff'
-const items = []
-var count = 0
-var playercount = 0
+import Round from '@/components/Round'
+import DataService from '@/services/DataService'
 const players = []
-
 export default {
   name: 'game',
   components: {
-    Stuff
+    Round
   },
   data () {
     return {
-      items: items,
       players: players,
-      errormsg: '',
       name: '',
-      total: null,
-      playercount: playercount
+      track: null,
+      items: []
+    }
+  },
+  async created () {
+    try {
+      const response = await DataService.getTracks()
+      this.track = response.data
+    } catch (err) {
+      console.log('error')
     }
   },
   methods: {
-    addScore (val) {
-      this.errormsg = ''
-      console.log(this.players.length)
-      if (this.players.length > count) {
-        this.items[count].throws = val + ' (' + (val - 4) + ')'
-        this.items[count].total += val - 4
-        count += 1
-      } else {
-        this.errormsg = 'All scores added already'
-      }
-    },
-    addPlayer (name, playercount) {
-      this.items.push({
-        name: this.name,
-        throws: 0,
-        total: 0
-      })
+    addPlayer: function () {
       this.players.push({
         name: this.name,
-        scores: [{
-          score: 0
-        }],
+        score: [],
         total: 0
       })
-      this.playercount += 1
+      this.items.push({
+        name: this.name,
+        score: 0,
+        total: 0
+      })
+      this.$store.dispatch('addPlayer', {
+        name: this.name,
+        score: [],
+        total: 0
+      })
+      this.name = ''
     },
-    removePlayer (i) {
+    delPlayer: function (player) {
+      const i = this.players.indexOf(player)
       this.players.splice(i, 1)
-      console.log(this.players)
+    },
+    start: function () {
+      this.$store.dispatch('setGame', true)
     }
   }
 }
@@ -63,20 +72,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.throwbutton {
-  padding:10px;
-  border: solid white 2px;
-  background-color:#17a2b8;
-  height:90px;
-  font-size: 50px;
-  color:white;
-  text-align: center;
-  cursor: pointer;
+ul {
+  list-style: none;
 }
-.throwbutton:hover{
-  background-color: #0592a6;
+#gamecreation {
+  text-align:center;
 }
-.throwbutton, select {
-  text-transform: none;
-}
+
 </style>
